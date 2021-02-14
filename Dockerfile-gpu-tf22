@@ -1,0 +1,27 @@
+FROM tensorflow/tensorflow:latest-gpu-py3
+  
+
+  
+RUN apt-get update
+RUN apt-get install -y tmux
+RUN apt-get install -y openslide-tools
+RUN apt-get install -y python-openslide
+RUN apt-get install -y libsm6 libxext6 libxrender-dev
+#RUN apt-get install -y mysql-server
+#RUN apt-get install -y libmysqlclient-dev
+
+COPY requirements_tf22.txt ./requirements.txt
+RUN pip3 install -r requirements.txt
+
+
+RUN mkdir -p /workdir
+WORKDIR /workdir
+
+
+RUN export LC_ALL=C.UTF-8
+RUN export LANG=C.UTF-8
+
+
+
+CMD ["/bin/bash"]
+

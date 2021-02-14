@@ -1,0 +1,224 @@
+FROM tensorflow/tensorflow:1.13.1-gpu-py3-jupyter
+  
+
+
+RUN mkdir -p /workdir
+WORKDIR /workdir
+
+
+
+#RUN add-apt-repository ppa:jonathonf/python-3.6
+#RUN apt-get update
+
+#RUN apt-get install -y python3.6
+#RUN apt-get install -y python3.6-dev
+
+#RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+#RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
+
+
+
+
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN python3 get-pip.py --force-reinstall
+
+
+
+RUN apt-get install -y apt-utils
+RUN apt update && apt install -y libsm6 libxext6
+RUN apt-get install -y libsm6 libxrender1 libfontconfig1
+
+RUN apt-get install -y htop
+RUN rm -rf /var/cache/apk/*
+RUN apt-get install -y sshpass
+RUN apt-get install  wget
+
+
+RUN pip3 install --upgrade notebook
+RUN pip3 install tensorflow-gpu==1.13.1
+RUN pip3 install requests
+RUN pip3 install numpy
+RUN pip3 install shapely
+RUN pip3 install scikit-image
+RUN pip3 install segmentation_models
+RUN pip3 install keras==2.2.4
+RUN pip3 install simplification
+RUN pip3 install albumentations
+RUN pip3 install keras_retinanet
+RUN pip3 install torch torchvision
+RUN pip3 install tqdm
+RUN pip3 install wget
+RUN pip3 install boto3
+RUN pip3 install jupyter
+RUN pip3 install pycocotools
+RUN pip3 install statsmodels
+RUN pip3 install librosa
+RUN pip3 install lightgbm
+RUN pip3 install tifffile
+RUN pip3 install cairosvg
+RUN pip3 install cython
+RUN pip3 install yahoo-finance
+RUN pip3 install tsfresh
+RUN pip3 install pyautocad
+RUN pip3 install annoy
+RUN pip3 install glog
+RUN pip3 install lxml
+RUN pip3 install psycopg2-binary
+RUN pip3 install azure
+
+
+
+
+
+
+RUN pip3 install sknw
+RUN pip3 install opencv-python==3.3.0.10
+RUN pip3 install opencv-contrib-python==3.3.1.11
+RUN pip3 install pyvips
+
+
+
+
+RUN apt install -y \
+    autoconf \
+    automake \
+    build-essential \
+    cmake \
+    libass-dev \
+    libfreetype6-dev \
+    libjpeg-dev \
+    libtheora-dev \
+    libtool \
+    libvorbis-dev \
+    libx264-dev \
+    pkg-config \
+    wget \
+    yasm \
+    zlib1g-dev
+
+RUN wget http://ffmpeg.org/releases/ffmpeg-3.2.tar.bz2
+RUN tar -xjf ffmpeg-3.2.tar.bz2
+RUN cd ffmpeg-3.2 && ./configure --disable-static --enable-shared --disable-doc && make && make install
+RUN pip3 install av
+RUN pip3 install motmetrics
+
+RUN apt-get update
+RUN apt-get install -y vim
+RUN apt-get install -y git
+
+RUN pip3 install opencv-python==3.3.0.10
+RUN pip3 install opencv-contrib-python==3.3.1.11
+
+
+RUN apt-get update && apt-get install -y apt-utils
+RUN apt-get install -y   libpq-dev 
+
+
+
+
+ARG MAGICK_VERSION=6.9.10-44
+ARG OPENSLIDE_VERSION=3.4.1
+ARG VIPS_VERSION=8.7.3
+ARG MAGICK_URL=https://unimartifacts.blob.core.windows.net/tar
+ARG OPENSLIDE_URL=https://github.com/openslide/openslide/releases/download
+ARG VIPS_URL=https://github.com/libvips/libvips/releases/download
+RUN apt update && apt install -y \
+  cmake \
+  autoconf \
+  automake \
+  libtool \
+  pkg-config \
+  libglib2.0-dev \
+  libsqlite3-dev \
+  libxml2-dev \
+  libgdk-pixbuf2.0-dev \
+  libcairo2-dev \
+  libpq-dev \
+  libopenjp2-7-dev \
+  libjpeg-dev \
+  libjpeg8-dev \
+  libjpeg-turbo8-dev \
+  libtiff5-dev \
+  libpango1.0-dev \
+  libgdk-pixbuf2.0-dev \
+  libffi-dev \
+  shared-mime-info \
+  libmagickwand-dev \
+  aptitude \
+  build-essential \
+  libexpat1-dev \
+  libgsf-1-dev \
+  wget && \
+  apt -y clean && \
+  rm -rf /var/lib/apt/lists/*
+RUN cd /tmp \  
+&& wget ${MAGICK_URL}/ImageMagick-${MAGICK_VERSION}.tar.xz \ 
+&& tar xf ImageMagick-${MAGICK_VERSION}.tar.xz \  
+&& cd ImageMagick-${MAGICK_VERSION} \  
+&& ./configure \  
+\--disable-static \  
+\--enable-shared \  
+\--with-jpeg \  
+\--with-jp2 \  
+\--with-openjp2 \  
+\--with-png \  
+\--with-tiff \  
+\--with-quantum-depth=8 \  
+\--without-magick-plus-plus \  
+\--without-bzlib \  
+\--without-zlib \  
+\--without-dps \  
+\--without-fftw \  
+\--without-fpx \  
+\--without-djvu \    
+\--without-fontconfig \   
+\--without-freetype \  
+\--without-jbig \  
+\--without-lcms \  
+\--without-lcms2 \  
+\--without-lqr \  
+\--without-lzma \  
+\--without-openexr \  
+\--without-pango \  
+\--without-webp \  
+\--without-x \  
+\--without-xml \  
+&& make \  
+&& make install \ 
+&& ldconfig /usr/local/lib
+WORKDIR /usr/local/src
+COPY ./openslide-init.patch /usr/local/src
+RUN wget ${OPENSLIDE_URL}/v${OPENSLIDE_VERSION}/openslide-${OPENSLIDE_VERSION}.tar.gz \
+    && tar xf openslide-${OPENSLIDE_VERSION}.tar.gz \
+    && patch -p0 <openslide-init.patch \
+        && cd openslide-${OPENSLIDE_VERSION} \
+    && ./configure \
+    && make \
+    && make install 
+
+
+
+
+RUN wget ${VIPS_URL}/v${VIPS_VERSION}/vips-${VIPS_VERSION}.tar.gz \
+    && tar xf vips-${VIPS_VERSION}.tar.gz \
+    && cd vips-${VIPS_VERSION} \
+    && ./configure \
+    && make V=0 \
+    && make install \
+  && ldconfig /usr/local/lib
+
+
+
+RUN pip3 install openslide-python
+
+
+WORKDIR /workdir
+
+
+RUN export LC_ALL=C.UTF-8
+RUN export LANG=C.UTF-8
+
+
+
+CMD ["/bin/bash"]
+
