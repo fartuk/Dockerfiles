@@ -1,0 +1,28 @@
+FROM ubuntu:18.04
+  
+
+RUN apt-get update
+RUN apt-get install -y tmux libsm6 libxext6 libxrender-dev 
+RUN apt-get install -y python3-pip
+RUN apt-get install -y libhdf5-serial-dev netcdf-bin libnetcdf-dev
+
+COPY requirements_dev.txt ./requirements.txt
+RUN pip3 install -r requirements.txt
+
+
+RUN mkdir -p /workdir
+WORKDIR /workdir
+
+
+RUN export LC_ALL=C.UTF-8
+RUN export LANG=C.UTF-8
+
+#ENV PYTHONPATH "${PYTHONPATH}:divid"
+#RUN export PYTHONPATH="$PYTHONPATH:/workdir/divid"
+#RUN export JUPYTER_PATH="${JUPYTER_PATH}:/workdir/divid"
+#CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
+
+COPY entry.sh /entry.sh
+#ENTRYPOINT ["/entry.sh"]
+ENTRYPOINT ["/bin/bash" ,"/entry.sh"] 
+CMD ["/bin/bash"]
