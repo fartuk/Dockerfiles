@@ -2,12 +2,14 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'morhetz/gruvbox'
-Plug 'davidhalter/jedi-vim'
+" Plug 'davidhalter/jedi-vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'nvie/vim-flake8'
 Plug 'tomtom/tcomment_vim'
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
 Plug 'vim-airline/vim-airline'
+Plug 'lambdalisue/suda.vim'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 call plug#end()
 
@@ -32,5 +34,6 @@ inoremap jj <Esc>
 
 map <C-n> :NERDTreeToggle<CR>
 let NERDTreeQuitOnOpen=1
-command! -nargs=0 Sw w !sudo tee % > /dev/null
 
+command! -nargs=0 Sw SudaWrite 
+map <C-s> :SudaWrite<CR>
