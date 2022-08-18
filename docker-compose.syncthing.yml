@@ -1,0 +1,18 @@
+version: "3"
+services:
+  syncthing:
+    image: syncthing/syncthing
+    container_name: syncthing
+    hostname: home-syncthing
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /var/syncthing:/var/syncthing
+      - /mnt:/var/syncthing/data
+    ports:
+      - 8384:8384 # Web UI
+      - 22000:22000/tcp # TCP file transfers
+      - 22000:22000/udp # QUIC file transfers
+      - 21027:21027/udp # Receive local discovery broadcasts
+    restart: unless-stopped
