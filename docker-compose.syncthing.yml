@@ -10,6 +10,7 @@ services:
     volumes:
       - /var/syncthing:/var/syncthing
       - /mnt:/var/syncthing/data
+      - ~/:/var/syncthing/home_data
     ports:
       - 8384:8384 # Web UI
       - 22000:22000/tcp # TCP file transfers
